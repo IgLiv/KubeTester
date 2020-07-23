@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sender
+  labels:
+    app: sender
+spec:
+  replicas: 10
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: sender
+  template:
+    metadata:
+      labels:
+        app: sender
+    spec:
+      containers:
+      - name: sender
+        image: tafthorne/ncat-centos:latest
+        imagePullPolicy: IfNotPresent
+
+        command: ['sh', '-c', 'while true ; do nc -i 7 -v sender-service.default.svc.cluster.local 80; sleep 5; done']
