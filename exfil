@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: exfil
+  labels:
+    app: exfil
+spec:
+  replicas: 5
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: exfil
+  template:
+    metadata:
+      labels:
+        app: exfil
+    spec:
+      containers:
+      - name: exfil
+        image: tafthorne/ncat-centos:latest
+        imagePullPolicy: IfNotPresent
+        command: ['sh', '-c', 'while true ; do curl -kv https://mymonero.com/ ; sleep 20; done']
