@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reciever
+  labels:
+    app: reciever
+spec:
+  replicas: 10
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: reciever
+  template:
+    metadata:
+      labels:
+        app: reciever
+    spec:
+      containers:
+      - name: reciever
+        image: tafthorne/ncat-centos:latest
+        imagePullPolicy: IfNotPresent
+
+        command: ['sh', '-c', 'while true ; do  echo -e "HTTP/1.1 200 OK\n\n $(date)" | nc -v -4 -l -p 80; done']
