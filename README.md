@@ -1,5 +1,5 @@
 # KubeTester
-Simple ncat based client\server using a K8s service
+Simple ncat based client\server traffic simulator using a K8s service
 
 `kubectl apply -f https://raw.githubusercontent.com/IgLiv/KubeTester/master/Receiver.yaml`
 
