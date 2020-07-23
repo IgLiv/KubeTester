@@ -21,4 +21,4 @@ spec:
         image: tafthorne/ncat-centos:latest
         imagePullPolicy: IfNotPresent
 
-        command: ['sh', '-c', 'while true ; do nc -i 7 -v sender-service.default.svc.cluster.local 80; sleep 5; done']
+        command: ['sh', '-c', 'while true ; do nc -i 7 -v reciever-service.default.svc.cluster.local 80; sleep 5; done']
