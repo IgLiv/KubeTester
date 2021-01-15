@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: billing-db
+  labels:
+    app: billing
+    role: db
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: billing
+      role: db
+  template:
+    metadata:
+      labels:
+        app: billing
+        role: db
+    spec:
+      containers:
+      - name: billing-db
+        image: tafthorne/ncat-centos:latest
+        imagePullPolicy: IfNotPresent
+
+        command: ['sh', '-c', 'while true ; do  echo -e "HTTP/1.1 200 OK\n\n $(date)" | nc -v -4 -l -p 3306; done']
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: billing-service
+spec:
+  selector:
+    app: billing
+    role: db
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: billing-web
+  labels:
+    app: billing
+    role: web
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: billing
+      role: web
+  template:
+    metadata:
+      labels:
+        app: billing
+        role: web
+    spec:
+      containers:
+      - name: billing-web
+        image: tafthorne/ncat-centos:latest
+        imagePullPolicy: IfNotPresent
+
+        command: ['sh', '-c', 'while true ; do nc -i 7 -v billing-service.production.svc.cluster.local 3306; sleep 5; done']
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: billing-rouge
+  labels:
+    app: billing
+    role: rouge
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: billing
+      role: rouge
+  template:
+    metadata:
+      labels:
+        app: billing
+        role: rouge
+    spec:
+      containers:
+      - name: billing-rouge
+        image: tafthorne/ncat-centos:latest
+        imagePullPolicy: IfNotPresent
+
+        command: ['sh', '-c', 'while true ; do nc -i 7 -v billing-service.production.svc.cluster.local 3306; sleep 5; done']
