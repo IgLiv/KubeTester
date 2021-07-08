@@ -20,4 +20,4 @@ spec:
       - name: exfil
         image: tafthorne/ncat-centos:latest
         imagePullPolicy: IfNotPresent
-        command: ['sh', '-c', 'while true ; do curl -kv https://mymonero.com/ ; sleep 20; done']
+        command: ['sh', '-c', 'while true ; do curl -kv 217.79.179.77 ; sleep 20; done']
