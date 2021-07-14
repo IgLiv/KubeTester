@@ -70,10 +70,10 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: billing-rouge
+  name: billing-rogue
   labels:
     app: billing
-    role: rouge
+    role: rogue
 spec:
   replicas: 3
   strategy:
@@ -81,15 +81,15 @@ spec:
   selector:
     matchLabels:
       app: billing
-      role: rouge
+      role: rogue
   template:
     metadata:
       labels:
         app: billing
-        role: rouge
+        role: rogue
     spec:
       containers:
-      - name: billing-rouge
+      - name: billing-rogue
         image: tafthorne/ncat-centos:latest
         imagePullPolicy: IfNotPresent
 
